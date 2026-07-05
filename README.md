@@ -17,9 +17,9 @@ This repository contains both parts of the mini-project:
 | **Part 2** | Autonomous drone exploration (GNSS-denied) | FUEL-inspired FIS · Holonomic VFH · 3D A* · OAK-D Lite |
 
 The **final submission document** (report + class presentation + paper copy, single PDF) is in
-[`Submission/`](Submission/). The report's LaTeX source is in [`review_main/`](review_main/).
-The presentation given in class is [`FUEL.pptx`](FUEL.pptx), and a copy of the selected paper
-(Zhou et al., *FUEL*, IEEE RA-L 2021) is included as a PDF in this folder.
+[`Submission/`](Submission/). The presentation given in class is [`FUEL.pptx`](FUEL.pptx),
+and a copy of the selected paper (Zhou et al., *FUEL*, IEEE RA-L 2021) is included as a PDF
+in this folder.
 Simulation results and graphs are in [`results/`](results/).
 
 ## Demos
@@ -387,16 +387,6 @@ presentation as Appendix A and a copy of the FUEL paper as Appendix B:
 
 [`Submission/Final_Project_Navigation_and_Control_209146216_209438910.pdf`](Submission/Final_Project_Navigation_and_Control_209146216_209438910.pdf)
 
-To rebuild it from source:
-
-```bash
-cd review_main
-latexmk -xelatex main.tex   # requires David CLM Hebrew font + TeX Gyre Termes
-```
-
-The appendices are embedded from `review_main/fuel_slides.pdf` (exported from
-[`FUEL.pptx`](FUEL.pptx)) and `review_main/fuel_paper.pdf`.
-
 ---
 
 ## Repository Layout
@@ -404,11 +394,6 @@ The appendices are embedded from `review_main/fuel_slides.pdf` (exported from
 ```
 .
 ├── Submission/             # Final submission: unified PDF (report + presentation + paper)
-├── review_main/
-│   ├── main.tex            # Full report source (LaTeX, Hebrew)
-│   ├── main.pdf            # Compiled report incl. appendices
-│   ├── fuel_slides.pdf     # Appendix A: class presentation (from FUEL.pptx)
-│   └── fuel_paper.pdf      # Appendix B: copy of the FUEL paper
 ├── src/                    # Part 1 ROS 2 packages (my_robot_*)
 │   ├── my_robot_description/
 │   ├── my_robot_bringup/

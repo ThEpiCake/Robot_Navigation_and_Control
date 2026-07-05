@@ -1,0 +1,21 @@
+# PID gains for the Computed-Torque controller (§5.1 of brief)
+#
+# Design rule (critical damping, no overshoot):
+#   Kp = omega_n^2,  Kd = 2*zeta*omega_n  (zeta=1 → critical)
+#   Ki small — kills steady-state error from model mismatch
+#
+# Joints:  [q1_yaw, q2_arm1, q3_arm2, q4_wristZ, q5_wristY, q6_wristZ2]
+
+computed_torque_pid:
+  # omega_n per joint: [5, 4, 4, 6, 6, 6] rad/s
+  Kp: [25.0,  16.0,  16.0,  36.0,  36.0,  36.0]
+  Kd: [10.0,   8.0,   8.0,  12.0,  12.0,  12.0]
+  Ki: [ 0.5,   0.5,   0.5,   0.5,   0.5,   0.5]
+  integral_limit: 5.0   # anti-windup clamp [rad or m]
+
+# Pure PID gains (no model — comparison baseline)
+pure_pid:
+  Kp: [50.0,  80.0,  80.0,  60.0,  60.0,  60.0]
+  Kd: [20.0,  30.0,  30.0,  20.0,  20.0,  20.0]
+  Ki: [ 1.0,   2.0,   2.0,   1.0,   1.0,   1.0]
+  integral_limit: 5.0

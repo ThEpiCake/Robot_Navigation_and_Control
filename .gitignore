@@ -1,0 +1,26 @@
+# ROS 2 build artifacts
+build/
+install/
+log/
+
+# Python bytecode
+**/__pycache__/
+**/*.pyc
+
+# Generated dynamics cache (recreated automatically by dynamics.py)
+**/.dynamics_cache.pkl
+
+# LaTeX intermediates
+*.aux
+*.log
+*.toc
+*.out
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.xdv
+*.synctex.gz
+
+# Local backup of uncompressed submission video
+*_original.mp4

@@ -1,0 +1,94 @@
+# Simulation configuration — automatic C-space planning (A -> B)
+# No manual pre_B/retract/rise waypoints.
+
+simulation:
+  dt: 0.001       # RK4 step size [s]
+  t_free: 3.0     # tau=0 free-response [s]
+  t_pid:  8.5     # legacy field (actual total time is computed from planned segments)
+
+# ── Task-space start/goal (planner input) ─────────────────────────────────────
+# RPY convention: ROS fixed-axis  R = Rz(yaw)·Ry(pitch)·Rx(roll)
+pose_waypoints:
+  # A: inside shelf 1, pick position.
+  #
+  # Position tuned so arm CAPSULE clears all shelf boards by ≥10 mm physical gap.
+  # Root issue: with natural tilt orientation (pitch=π/4), the wrist section
+  # (T07→gripper) passes at z≈0.22–0.24m — right at the divider.  Lowering x
+  # from 0.467→0.455 m moves the wrist 6 mm further from the shelf front face,
+  # giving 46 mm capsule clearance (vs arm radius 35 mm → 11 mm physical gap).
+  #
+  # Capsule check: 46 mm  (segment T07→grip vs divider corner)
+  # Physical gap:  11 mm  = 46 - 35 mm arm radius
+  - name: A_shelf1
+    position: [0.455, -0.1, 0.150]
+    rpy: [3.14159265358979, 0.78539816339745, 3.14159265358979]
+    duration: 1.5
+
+  # B: inside shelf 2, horizontal tool.
+  # z=0.32 (raised from 0.30): left finger sweeps 70mm above divider (not 44mm),
+  # giving 19.5mm physical gap along the path vs 9mm at z=0.30.
+  # y=0.04: 95mm from right panel. Capsule at B: 70mm (phys gap 35mm).
+  - name: B_shelf2
+    # z=0.32: verified reachable (IK ok, 19.5mm physical path gap to divider).
+    # z=0.15 was UNREACHABLE with pitch=pi/2 (min reachable z ≈ 0.232m).
+    position: [0.50, -0.3, 0.32]
+    rpy: [3.14159265358979, 1.5707963267948966, 3.14159265358979]
+    duration: 1.5
+
+# ── Automatic path planning in C-space (Lecture 4 roadmap principle) ─────────
+planning:
+  enabled: true
+
+  # Obstacle model for planning/safety checks
+  obstacle_inflation: 0.000
+
+  # Capsule collision model (Lecture 2: C-obstacle via Minkowski sum):
+  #   C_free = {q | arm_capsule_clearance(q, W_obs) > arm_r + surface_margin}
+  #   arm_capsule_clearance = min segment distance from arm links to obstacle boxes
+  #   C_obstacle boundary = where capsule SURFACE touches obstacle
+  #   Threshold = arm_surface_radius (exact physical radius) + surface_margin (safety)
+  arm_surface_radius: 0.035   # exact arm cylinder radius [m]
+  # surface_margin: enforces that every planned config has physical gap ≥ margin.
+  # 2mm (prev) was too low — biRRT accepted 9mm physical gap at wrist swing peak
+  # which is not enough for Gazebo tracking errors (+5-10mm).
+  # 10mm forces biRRT to reject configs within 45mm of any obstacle surface,
+  # so the entire path has ≥10mm physical clearance throughout.
+  surface_margin: 0.010       # 10mm safety buffer (total threshold = 45mm)
+
+  # biRRT parameters
+  max_iters: 15000
+  goal_bias: 0.20
+  step_norm: 0.06             # fine-grained C-space steps
+  edge_resolution_norm: 0.012 # fine edge check for narrow passages
+
+  # Path shortening
+  shortcut_trials: 400
+
+  # Convert planned nodes -> quintic segment durations
+  min_segment_duration: 0.50
+  max_segment_duration: 2.00
+  seconds_per_unit: 3.5
+
+  # Swept-path pre-check (samples per segment, uses capsule model)
+  swept_samples: 150
+
+# ── Local navigation repulsion (added to computed-torque PID) ─────────────────
+navigation:
+  # repulsion_scope: critical (divider only) or shelf (all bookshelf boards)
+  repulsion_scope: shelf
+  obstacle_inflation: 0.005
+  rho0: 0.02
+  eta: 0.0
+
+  # Post-run safety floor using capsule model.
+  min_clearance_threshold: 0.036
+
+# ── Free-response start state (simulate_free.py) ──────────────────────────────
+q_start: [0.0, 0.05, 0.0504, 0.0, 0.0, 0.0]
+
+# ── Legacy single-point fields (kept for compatibility) ───────────────────────
+ee_A:
+  position: [0.467, -0.1, 0.133]
+ee_B:
+  position: [0.5, 0.1, 0.3]
+trajectory_duration: 3.0

@@ -1,0 +1,132 @@
+ <!--<launch>
+
+    <let name="urdf_path"
+         value="$(find-pkg-share arm_robot_description)/urdf/robot_arm.urdf.xacro" />
+    <let name="rviz_config_path"
+        value="$(find-pkg-share arm_robot_description)/rviz/urdf_config.rviz" />
+    <let name="gazebo_config_path"
+        value="$(find-pkg-share arm_robot_bringup)/config/gazebo_bringup.sdf" />
+
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description"
+             value="$(command 'xacro $(var urdf_path)')" />
+    </node>
+
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="empty.sdf -r"/>
+         <arg name="gz_args" value="$(find-pkg-share arm_robot_bringup)/config/gazebo/gazebo_bringup.sdf -r" />  
+    </include>
+
+    <node pkg="ros_gz_sim" exec="create" args="-topic robot_description" />
+
+   <node pkg="ros_gz_bridge" exec="parameter_bridge">
+        <param name="config_file" value="$(var gazebo_config_path)" />
+    </node>
+
+    <node pkg="rviz2" exec="rviz2" output="screen" args="-d $(var rviz_config_path)" />
+</launch>
+-->
+
+<launch>
+    <arg name="spawn_robot" default="true" />
+    <arg name="robot_name" default="custom_rpp_zyz_robot" />
+    <arg name="allow_renaming" default="false" />
+    <arg name="world_name" default="empty" />
+    <arg name="cleanup_renamed_duplicates" default="false" />
+
+    <let name="urdf_path"
+         value="$(find-pkg-share my_robot_description)/urdf/robot_arm.urdf.xacro" />
+
+    <let name="rviz_config_path"
+         value="$(find-pkg-share my_robot_description)/rviz/urdf_config.rviz" />
+
+    <let name="bridge_config_path"
+         value="$(find-pkg-share my_robot_bringup)/config/gazebo_bridge.yaml" />
+    <let name="gui_config_path"
+         value="$(find-pkg-share my_robot_bringup)/config/gz_gui/fixed_camera.config" />
+
+    <node pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+        <param name="robot_description"
+               value="$(command 'xacro $(var urdf_path)')" />
+        <param name="use_sim_time" value="true" />
+    </node>
+
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="$(find-pkg-share my_robot_bringup)/worlds/pos.sdf --gui-config $(var gui_config_path) -r" />
+        <arg name="on_exit_shutdown" value="true" />
+    </include>
+
+    <!-- Cleanup stale renamed models from previous runs: custom_rpp_zyz_robot_0..9 -->
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_0" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_1" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_2" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_3" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_4" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_5" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_6" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_7" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_8" />
+    </node>
+    <node pkg="ros_gz_sim" exec="remove" output="screen" if="$(var cleanup_renamed_duplicates)">
+        <param name="world" value="$(var world_name)" />
+        <param name="entity_name" value="$(var robot_name)_9" />
+    </node>
+
+    <node pkg="ros_gz_sim"
+          exec="create"
+          output="screen"
+          if="$(var spawn_robot)">
+        <!-- Use official parameters API (same as ros_gz_sim spawn launch files). -->
+        <param name="topic" value="robot_description" />
+        <param name="name" value="$(var robot_name)" />
+        <param name="allow_renaming" value="$(var allow_renaming)" />
+    </node>
+
+    <node pkg="ros_gz_bridge"
+          exec="parameter_bridge"
+          name="ros_gz_bridge"
+          output="screen">
+        <param name="config_file" value="$(var bridge_config_path)" />
+    </node>
+
+    <node pkg="controller_manager"
+          exec="spawner"
+          name="spawner_arm_controllers"
+          output="screen"
+          args="--controller-manager /controller_manager --controller-manager-timeout 120 --service-call-timeout 120 --activate-as-group joint_state_broadcaster arm_position_controller" />
+
+    <node pkg="rviz2"
+          exec="rviz2"
+          name="rviz2"
+          output="screen"
+          args="-d $(var rviz_config_path)">
+        <param name="use_sim_time" value="true" />
+    </node>
+
+</launch>

@@ -1,0 +1,18 @@
+<launch>
+  <!-- Full demo wrapper: Gazebo bringup + CSV trajectory playback. -->
+  <arg name="csv_file"
+       default="/home/thepicake/ros2_nav_control_project/results/pid_trajectory.csv"/>
+  <arg name="loop" default="false"/>
+  <arg name="speed_factor" default="1.0"/>
+
+  <include file="$(find-pkg-share my_robot_bringup)/launch/my_robot_gazebo.launch.xml"/>
+
+  <node pkg="my_robot_control"
+        exec="gazebo_control"
+        name="arm_control_node"
+        output="screen">
+    <param name="csv_file" value="$(var csv_file)"/>
+    <param name="loop" value="$(var loop)"/>
+    <param name="speed_factor" value="$(var speed_factor)"/>
+  </node>
+</launch>

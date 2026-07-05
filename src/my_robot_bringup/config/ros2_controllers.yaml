@@ -1,0 +1,21 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 200
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+arm_position_controller:
+  ros__parameters:
+    joints:
+      - joint_base_yaw
+      - joint_arm1_prismatic
+      - joint_arm2_prismatic
+      - joint_wrist_z1
+      - joint_wrist_y
+      - joint_wrist_z2
+    interface_name: position

@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+from my_robot_control.simulate_pid import main
+
+
+if __name__ == "__main__":
+    main()

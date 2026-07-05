@@ -8,6 +8,7 @@
 \usepackage[a4paper,left=25mm,right=25mm,top=20mm,bottom=25mm]{geometry}
 \usepackage{setspace}
 \onehalfspacing
+\setlength{\emergencystretch}{2em}
 
 % — חבילות עיצוב ומתמטיקה —
 \usepackage{amsmath}
@@ -140,7 +141,7 @@
 \newpage
 \begingroup\small
 \listoffigures
-\vspace{1.2cm}
+\newpage
 \listoftables
 \endgroup
 \newpage
@@ -571,10 +572,9 @@ a_3 = \frac{10}{T^3},\; a_4 = \frac{-15}{T^4},\; a_5 = \frac{6}{T^5}
 \end{itemize}
 
 \subsection{אינטגרציה עם \textenglish{ROS2} ו-\textenglish{Gazebo}}
-המסלול המחושב ב-\textenglish{Python} מיוצא לקובץ \texttt{pid\_trajectory.csv}.
-צומת \texttt{gazebo\_control\_node.py} קורא את הקובץ ומפרסם פקודות מיקום לכל אחד מ-6 המפרקים בתדר גבוה
-לבקר \texttt{arm\_position\_controller} (מסוג \textenglish{ForwardCommandController}) שבתוך \textenglish{Gazebo}.
-בכך משמש \textenglish{Gazebo} כפלטפורמת הדמיה ואימות של ה-\textenglish{URDF} ביחס לסימולציה הדינמית שבוצעה ב-\textenglish{Python}.
+{\sloppy המסלול המחושב ב-\textenglish{Python} מיוצא לקובץ \texttt{pid\_trajectory.csv}.
+צומת \texttt{gazebo\_control\_node.py} קורא את הקובץ ומפרסם פקודות מיקום לכל אחד מ-6 המפרקים בתדר גבוה. הפקודות מגיעות לבקר המיקום \texttt{arm\_position\_controller}, בקר מסוג \textenglish{ForwardCommandController}, הפועל בתוך \textenglish{Gazebo}.
+בכך משמש \textenglish{Gazebo} כפלטפורמת הדמיה ואימות של ה-\textenglish{URDF} ביחס לסימולציה הדינמית שבוצעה ב-\textenglish{Python}.\par}
 
 \subsection{מסקנות}
 הפרויקט מדגים בהצלחה תכנון, מודל מתמטי, ובקרת \textenglish{CTC} למניפולטור בן 6 דרגות חופש. להלן עיקרי הממצאים:
@@ -885,7 +885,7 @@ $\text{inflate cells}$ & 1 תא & ניפוח מכשולים (0.2 מ') \\
 
 \subsection{תוצאות — ריצה סופית}
 
-הריצה הסופית של המערכת (עם כל השינויים: VFH הולונומי, log\_odds=0.60, LiDAR מוסר, takeoff\_lookaround=False) הניבה:
+הריצה הסופית של המערכת — הכוללת את כל השינויים: \textenglish{VFH} הולונומי, \texttt{log\_odds=0.60}, הסרת ה-\textenglish{LiDAR} וביטול סריקת ההמראה — הניבה:
 
 \begin{table}[H]
 \centering
@@ -1033,6 +1033,7 @@ $\text{inflate cells}$ & 1 תא & ניפוח מכשולים (0.2 מ') \\
 \textbf{מבנה התוכנה — פונקציות עיקריות:}
 \begin{table}[H]
 \centering
+\small
 \begin{tabular}{ccc}
 \toprule
 \textbf{קובץ} & \textbf{שפה} & \textbf{פונקציות עיקריות} \\
@@ -1084,6 +1085,7 @@ $\text{inflate cells}$ & 1 תא & ניפוח מכשולים (0.2 מ') \\
 
 \begin{table}[H]
 \centering
+\small
 \begin{tabular}{ccc}
 \toprule
 \textbf{בעיה} & \textbf{סיבת שורש} & \textbf{פתרון} \\

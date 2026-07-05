@@ -187,7 +187,7 @@ PID gains: `config/pid_gains.yaml` — tuned for critical damping (ζ=1), ωₙ 
 
 ### Architecture
 
-GNSS-denied autonomous exploration of a 3-room warehouse environment using a single **DJI X500** quadrotor in Gazebo Harmonic + PX4 SITL.
+GNSS-denied autonomous exploration of a 3-room warehouse environment using a single **Holybro X500** quadrotor in Gazebo Harmonic + PX4 SITL.
 
 **Sensor:** OAK-D Lite stereo depth camera (69.4°×54.4° FOV, 0.1–8.0 m range, 30 Hz) — 2D LiDAR removed.  
 **Localization:** PX4 EKF2 (IMU + BaroAlt + Optical Flow) with `slam_to_px4` yaw-gate filtering.

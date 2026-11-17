@@ -1,7 +1,7 @@
 # Robot Motion Planning and Control — Mini-Project
 
 **BGU Course 362-2-5481** | Spring 2026  
-**Students:** Etay Baron (209438910) · Roee Zehavi (209146216)  
+**Students:** Etay Baron · Roee Zehavi  
 **Supervisor:** Prof. Amir Shapiro  
 **Repository:** <https://github.com/ThEpiCake/Robot_Navigation_and_Control>
 
@@ -385,7 +385,7 @@ python3 plot_extra_graphs.py       # additional: 3D trajectory, Gantt, coverage 
 The final submission is a single unified PDF — the full report (Hebrew), with the class
 presentation as Appendix A and a copy of the FUEL paper as Appendix B:
 
-[`Submission/Final_Project_Navigation_and_Control_209146216_209438910.pdf`](Submission/Final_Project_Navigation_and_Control_209146216_209438910.pdf)
+[`Submission/Final_Project_Navigation_and_Control.pdf`](Submission/Final_Project_Navigation_and_Control.pdf)
 
 ---
 
